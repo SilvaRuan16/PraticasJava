@@ -13,19 +13,30 @@ import java.util.Scanner;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
 
+    ///  Initial Menu Method
     private static void generateMenu() {
         System.out.println("-----------------------");
         System.out.println("Welcome to PDF Generator");
         System.out.println("-----------------------");
     }
 
-    /*
-    private static void checkVariableIsEmpty(Scanner scan, String args) {
-         do {
-            args = scan.nextLine();
-        } while (args.isEmpty());
+    ///  Method to check if variable is empty
+
+    private static String checkVariableIsEmpty(Scanner scan) {
+
+        String input = "";
+
+        do {
+            input = scan.nextLine();
+
+            if (input.isEmpty()) {
+                System.out.println("The value cannot be empty. You need to try again please:");
+            }
+        } while (input.isEmpty());
+
+        return input;
     }
-    */
+
 
     public static void main(String[] args) {
 
@@ -39,24 +50,39 @@ public class Main {
             generateMenu();
 
             ///  Create variables for use in console
-            String nameFile = "";
-            String titleDocument = "";
-            String textDocument = "";
+            String nameFile         = "";
+            String titleDocument    = "";
+            String textDocument     = "";
 
             /// Create interactive console
             System.out.println("Insert nameFile here:");
-            nameFile = scan.nextLine();
+            nameFile = checkVariableIsEmpty(scan);
 
             System.out.println("Insert title document:");
-            titleDocument = scan.nextLine();
+            titleDocument = checkVariableIsEmpty(scan);
 
             System.out.println("Insert text document:");
-            textDocument = scan.next();
+            textDocument = checkVariableIsEmpty(scan);
 
+            ///  Check if user insert .pdf together name file
+            if (!nameFile.contains(".pdf")) {
+                nameFile += ".pdf";
+            }
+
+            ///  Break line space
+            System.out.println("\n");
+
+            /// Show info preview
+            System.out.println("-----------------------");
+            System.out.println("Preview document file");
+            System.out.println("-----------------------");
+
+            ///  Testing if content was successfully added
             System.out.println(nameFile);
             System.out.println(titleDocument);
             System.out.println(textDocument);
 
+            ///  Get info and write this in new PDF file
             PdfWriter.getInstance(document, new FileOutputStream(nameFile));
             document.open();
             document.add(new Paragraph(titleDocument));
