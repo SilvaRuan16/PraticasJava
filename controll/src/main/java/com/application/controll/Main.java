@@ -13,7 +13,7 @@ import java.util.UUID;
  *
  * @author ruan
  */
-public class Controll {
+public class Main {
 
     public static void main(String[] args) {
         JHomeFrame frame = new JHomeFrame();

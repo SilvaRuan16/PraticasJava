@@ -4,8 +4,9 @@
  */
 package com.application.controll.Service;
 
-import com.application.Database.ConnectionDB;
+import com.application.controll.Database.ConnectionDB;
 import com.application.controll.Model.ProductModel;
+import com.application.controll.Repository.ProductRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -15,29 +16,64 @@ import java.sql.SQLException;
  * @author ruan
  */
 public class ProductService {
-    private static Connection conn =  new ConnectionDB().getConnectionDB();
+    private static final ProductRepository repository = new ProductRepository();
     
-    /// Example Insert with UUID
-    /// pst.setString(1, product.getProductId().toString()));
-    ///
-    /// Example Read with UUID
-    /// Convert String to UUID
-    /// String idStr = rs.getString("productId");
-    /// pst.setProductId(UUID.fromString(idStr));
+    public Double calculateAdjustment(ProductModel product, boolean useBasePrice) {
+        Double salePrice = useBasePrice 
+                           ? product.getProductBasePrice() 
+                           : product.getProductPrice();
+        Double taxRate = product.getProductTAX() / 100;
+        Double taxAmount = salePrice * taxRate;
+        return salePrice - taxAmount - product.getProductAcquisitionPrice();
+    }
     
-    public ProductModel insertProduct() throws SQLException {
+    public boolean saveProduct(ProductModel product) throws Exception {
         
-        try {
-            PreparedStatement pst = conn.prepareStatement("");
-            
-            pst.setString(1, "columnName");
-            pst.executeUpdate();
-        } catch (SQLException exception) {
-            System.err.println("Sqlite DB Cannot Connection => " + exception.getMessage());
-        } finally {
-            conn.close();
+        if (product.getProductTAX() == null            || 
+            product.getProductTAX().toString().isEmpty()) {
+            product.setProductTAX(0.0);
         }
         
-        return null;
+        if (product.getProductPrice()             == null ||
+            product.getProductBasePrice()         == null ||
+            product.getProductAcquisitionPrice()  == null  ) {
+            System.err.println("Error => The Price Cannot Be Negative.");
+            return false;
+        }
+        
+        if (product.getProductPrice()       < 0    || 
+            product.getProductBasePrice()   < 0    || 
+            product.getProductAcquisitionPrice() < 0) {
+            System.err.println("Error => The Price Cannot Be Negative.");
+            return false;
+        }
+        
+        if (product.getProductName() == null ||
+            product.getProductName().trim().isEmpty()) {
+            System.err.println("Error => The Name Cannot Be Null/Empty");
+            return false;
+        }
+        
+        if (repository.existsByCode(product.getProductCode())) {
+            System.err.println("Error => Already Exists Product With This Code: " + product.getProductCode());
+            return false;
+        }
+        
+        if (product.getProductAmount() < 3) {
+            System.err.println("Warning: Low stock alert (minimum 3 units recommended).");
+        }
+        
+        if (product.getProductPrice() < product.getProductBasePrice()) {
+            System.err.println("The Product Price Cannot Be Lower Than Product Price Base.");
+            return false;
+        }
+        
+        if (product.getProductBasePrice() < product.getProductAcquisitionPrice()) {
+            System.err.println("The Product Base Price Cannot Be Lower Than Product Acquisiton Price.");
+            return false;
+        }
+        
+        repository.save(product);
+        return true;
     }
 }

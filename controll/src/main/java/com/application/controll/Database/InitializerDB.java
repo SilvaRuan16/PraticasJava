@@ -2,36 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.application.Database;
+package com.application.controll.Database;
 
-import com.application.controll.core.Default;
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.SQLDataException;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
  * @author ruan
  */
-public class ConnectionDB implements Default {
-    private static final String url = "jdbc:sqlite:controllDB.db";
-    private static Connection conn  = null;
+public class InitializerDB {
     
-    @Override
-    public Connection getConnectionDB() {
-        try {
-            if (conn == null || conn.isClosed()) {
-                conn = DriverManager.getConnection(url);
-                System.out.println("Sqlite Connection Established!");
-            }
-        } catch (SQLException exception) {
-            System.err.println("Sqlite DB Cannot Connection => " + exception.getMessage());
-        }
-        
-        return conn;
-    }
-    
-    private static void createTables() {
+    public static void createTables() throws SQLException {
         String sql = """
                      CREATE TABLE IF NOT EXISTS Products (
                         productId                   TEXT PRIMARY KEY NOT NULL,
@@ -47,5 +31,20 @@ public class ConnectionDB implements Default {
                         productIsActive             INTEGER
                      );
                      """;
+        
+        /// Instance DB-Connection
+        ConnectionDB db = new ConnectionDB();
+        
+        Connection conn = db.getConnectionDB();
+        Statement stmt = conn.createStatement();
+        
+        try {
+            
+           stmt.execute(sql);
+           System.out.println("Tables checked/created successfully!");
+            
+        } catch (SQLException exception) {
+            System.err.println("Cannot Create Table Because => " + exception.getMessage());
+        }
     }
 }
