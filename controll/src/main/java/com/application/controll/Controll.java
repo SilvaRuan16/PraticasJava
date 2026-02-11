@@ -4,7 +4,9 @@
 
 package com.application.controll;
 
-import com.application.controll.frames.JHomeFrame;
+import com.application.controll.Model.ProductModel;
+import com.application.controll.UI.JHomeFrame;
+import java.util.UUID;
 
 
 /**
@@ -16,5 +18,13 @@ public class Controll {
     public static void main(String[] args) {
         JHomeFrame frame = new JHomeFrame();
         frame.setVisible(true);
+        
+        /*
+        ProductModel product = new ProductModel();
+        
+        product.setProductId(UUID.randomUUID());
+        
+        System.out.println("Try insert UUID => " + product.getProductId());
+        */
     }
 }
