@@ -5,23 +5,24 @@
 package com.application.controll.Model;
 
 import java.util.UUID;
+import javax.swing.*;
 
 /**
  *
  * @author ruan
  */
-public class ProductModel {
-    private UUID    productId                  =    null    ;
-    private String  productCode                =    ""      ;
-    private String  productName                =    ""      ;
-    private String  productDescription         =    ""      ;
-    private Double  productBasePrice           =    0.0     ;
-    private Double  productPrice               =    0.0     ;
-    private Double  productAcquisitionPrice    =    0.0     ;
-    private Double  productTAX                 =    0.0     ;
-    private Integer productAmount              =    0       ;
-    private String  productCategory            =    ""      ;
-    private Boolean productIsActive            =    true    ;
+public final class ProductModel {
+    private UUID productId = null;
+    private String productCode = "";
+    private String productName = "";
+    private String productDescription = "";
+    private Double productBasePrice = 0.0;
+    private Double productPrice = 0.0;
+    private Double productAcquisitionPrice = 0.0;
+    private Double productTAX = 0.0;
+    private Integer productAmount = 0;
+    private String productCategory = "";
+    private String productIsActive = "";
     
     
     /// Empty Constructor
@@ -29,33 +30,47 @@ public class ProductModel {
     }
     
     /// Constructor for Insert a new Data
-    public ProductModel(String productCode, String productName, String productDescription, Double productBasePrice, Double productPrice, Double productAcquisitionPrice, Double productTAX, Integer productAmount, String productCategory, Boolean productIsActive) {
-        this.productId                 =    UUID.randomUUID()        ;
-        this.productCode               =    productCode              ;
-        this.productName               =    productName              ;
-        this.productDescription        =    productDescription       ;
-        this.productBasePrice          =    productBasePrice         ;
-        this.productPrice              =    productPrice             ;
-        this.productAcquisitionPrice   =    productAcquisitionPrice  ;
-        this.productTAX                =    productTAX               ;
-        this.productAmount             =    productAmount            ;
-        this.productCategory           =    productCategory          ;
-        this.productIsActive           =    productIsActive          ;
+    public ProductModel(JTextField productCode, JTextField productName, JTextArea productDescription, JTextField productBasePrice, JTextField productPrice, JTextField productAcquisitionPrice, JTextField productTAX, JTextField productAmount, JTextField productCategory, JTextField productIsActive) {
+        this.setProductId(UUID.randomUUID());
+        this.setProductCode(productCode.getText());
+        this.setProductName(productName.getText());
+        this.setProductDescription(productDescription.getText());
+        this.setProductCategory(productCategory.getText());
+        this.setProductIsActive(productIsActive.getText());
+        
+        try {
+            this.setProductBasePrice(Double.valueOf(productBasePrice.getText().replace(",", ".")));
+            this.setProductPrice(Double.valueOf(productPrice.getText().replace(",", ".")));
+            this.setProductAcquisitionPrice(Double.valueOf(productAcquisitionPrice.getText().replace(",", ".")));
+            this.setProductTAX(Double.valueOf(productTAX.getText().replace(",", ".")));
+            this.setProductAmount(Integer.valueOf(productAmount.getText()));
+        } catch (NumberFormatException e) {
+            System.err.println("Erro nos campos númericos => " + e.getMessage());
+        }
     }
     
-    /// Constructor for Update, Read and Delete Query
-    public ProductModel(UUID productId, String productCode, String productName, String productDescription, Double productBasePrice, Double productPrice, Double productAcquisitionPrice, Double productTAX, Integer productAmount, String productCategory, Boolean productIsActive) {
-        this.productId                 =    productId                ;
-        this.productCode               =    productCode              ;
-        this.productName               =    productName              ;
-        this.productDescription        =    productDescription       ;
-        this.productBasePrice          =    productBasePrice         ;
-        this.productPrice              =    productPrice             ;
-        this.productAcquisitionPrice   =    productAcquisitionPrice  ;
-        this.productTAX                =    productTAX               ;
-        this.productAmount             =    productAmount            ;
-        this.productCategory           =    productCategory          ;
-        this.productIsActive           =    productIsActive          ;
+    /// Constructor for Update and Delete Query
+    public ProductModel(UUID productId, String productCode, String productName, String productDescription, Double productBasePrice, Double productPrice, Double productAcquisitionPrice, Double productTAX, Integer productAmount, String productCategory, String productIsActive) {
+        this.productId = productId;
+        this.productCode = productCode;
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.productBasePrice = productBasePrice;
+        this.productPrice = productPrice;
+        this.productAcquisitionPrice = productAcquisitionPrice;
+        this.productTAX = productTAX;
+        this.productAmount = productAmount;
+        this.productCategory = productCategory;
+        this.productIsActive = productIsActive;
+    }
+    
+    /// Constructor for Read
+    public ProductModel(String code, String name, String description, Double basePrice, Double price) {
+        this.productCode = code;
+        this.productName = name;
+        this.productDescription = description;
+        this.productBasePrice = basePrice;
+        this.productPrice = price;
     }
     
     public UUID getProductId() {
@@ -138,11 +153,11 @@ public class ProductModel {
         this.productCategory = productCategory;
     }
     
-    public Boolean getProductIsActive() {
+    public String getProductIsActive() {
         return productIsActive;
     }
     
-    public void setProductIsActive(Boolean productIsActive) {
+    public void setProductIsActive(String productIsActive) {
         this.productIsActive = productIsActive;
     }
 }

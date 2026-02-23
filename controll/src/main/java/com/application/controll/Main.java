@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         JHomeFrame frame = new JHomeFrame();
         frame.setVisible(true);
         

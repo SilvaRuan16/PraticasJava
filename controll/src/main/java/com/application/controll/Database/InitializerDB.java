@@ -5,7 +5,7 @@
 package com.application.controll.Database;
 
 import java.sql.Connection;
-import java.sql.SQLDataException;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -16,7 +16,11 @@ import java.sql.Statement;
 public class InitializerDB {
     
     public static void createTables() throws SQLException {
-        String sql = """
+        
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:controllDB.db");
+            Statement stmt = conn.createStatement();) {
+            
+            String sql = """
                      CREATE TABLE IF NOT EXISTS Products (
                         productId                   TEXT PRIMARY KEY NOT NULL,
                         productCode                 TEXT UNIQUE,
@@ -28,20 +32,12 @@ public class InitializerDB {
                         productTAX                  NUMERIC(9,2),
                         productAmount               INTEGER NOT NULL,
                         productCategory             TEXT NOT NULL,
-                        productIsActive             INTEGER
+                        productIsActive             VARCHAR(10) NOT NULL
                      );
                      """;
-        
-        /// Instance DB-Connection
-        ConnectionDB db = new ConnectionDB();
-        
-        Connection conn = db.getConnectionDB();
-        Statement stmt = conn.createStatement();
-        
-        try {
             
-           stmt.execute(sql);
-           System.out.println("Tables checked/created successfully!");
+            stmt.execute(sql);
+            System.out.println("Tables checked/created successfully!");
             
         } catch (SQLException exception) {
             System.err.println("Cannot Create Table Because => " + exception.getMessage());

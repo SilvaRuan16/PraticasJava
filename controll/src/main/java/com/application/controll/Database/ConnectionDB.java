@@ -14,15 +14,17 @@ import java.sql.SQLException;
  * @author ruan
  */
 public class ConnectionDB implements Default {
-    private static final String url = "jdbc:sqlite:controllDB.db";
-    private static Connection conn  = null;
     
     @Override
     public Connection getConnectionDB() {
+        String url = "jdbc:sqlite:controllDB.db";
+        Connection conn = null;
         try {
             if (conn == null || conn.isClosed()) {
                 conn = DriverManager.getConnection(url);
                 System.out.println("Sqlite Connection Established!");
+                
+                InitializerDB.createTables();
             }
         } catch (SQLException exception) {
             System.err.println("Sqlite DB Cannot Connection => " + exception.getMessage());

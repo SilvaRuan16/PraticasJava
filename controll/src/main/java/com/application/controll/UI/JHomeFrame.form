@@ -25,13 +25,13 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-              <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+              <Component id="jButtonBack" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="373" max="32767" attributes="0"/>
               <Component id="JAddProductButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+              <Component id="jButtonEdit" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+              <Component id="jButtonDelete" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
           </Group>
           <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
@@ -47,10 +47,10 @@
               <Component id="JTitleLabel" min="-2" pref="54" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton1" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="jButtonEdit" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="JAddProductButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jButton3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="jButtonDelete" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="jButtonBack" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="483" max="32767" attributes="0"/>
@@ -76,20 +76,20 @@
         <Property name="text" type="java.lang.String" value="Produtos"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="jButtonEdit">
       <Properties>
         <Property name="text" type="java.lang.String" value="Editar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEditActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="jButtonDelete">
       <Properties>
         <Property name="text" type="java.lang.String" value="Excluir"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDeleteActionPerformed"/>
       </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -99,18 +99,24 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTable1">
+        <Component class="javax.swing.JTable" name="jTableProducts">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="0">
+              <Table columnCount="5" rowCount="0">
                 <Column editable="false" title="C&#xf3;digo" type="java.lang.String"/>
-                <Column editable="false" title="Pre&#xe7;o" type="java.lang.Double"/>
                 <Column editable="false" title="Produto" type="java.lang.String"/>
                 <Column editable="false" title="Descri&#xe7;&#xe3;o" type="java.lang.String"/>
+                <Column editable="false" title="Pre&#xe7;o Min" type="java.lang.Double"/>
+                <Column editable="false" title="Pre&#xe7;o" type="java.lang.Double"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
@@ -136,11 +142,12 @@
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
+            <Property name="updateSelectionOnSort" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="jButtonBack">
       <Properties>
         <Property name="text" type="java.lang.String" value="Sair"/>
       </Properties>

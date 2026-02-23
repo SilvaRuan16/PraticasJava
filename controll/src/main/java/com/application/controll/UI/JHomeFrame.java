@@ -1,5 +1,10 @@
 package com.application.controll.UI;
 
+import com.application.controll.Model.ProductModel;
+import com.application.controll.Service.ProductService;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -15,9 +20,11 @@ public class JHomeFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form JHomeFrame
+     * @throws java.lang.Exception
      */
-    public JHomeFrame() {
+    public JHomeFrame() throws Exception {
         initComponents();
+        refreshTableInfo();
     }
 
     /**
@@ -31,11 +38,11 @@ public class JHomeFrame extends javax.swing.JFrame {
 
         JAddProductButton = new javax.swing.JButton();
         JTitleLabel = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonEdit = new javax.swing.JButton();
+        jButtonDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
+        jTableProducts = new javax.swing.JTable();
+        jButtonBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,25 +53,25 @@ public class JHomeFrame extends javax.swing.JFrame {
         JTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JTitleLabel.setText("Produtos");
 
-        jButton1.setText("Editar");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jButtonEdit.setText("Editar");
+        jButtonEdit.addActionListener(this::jButtonEditActionPerformed);
 
-        jButton2.setText("Excluir");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        jButtonDelete.setText("Excluir");
+        jButtonDelete.addActionListener(this::jButtonDeleteActionPerformed);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Código", "Preço", "Produto", "Descrição"
+                "Código", "Produto", "Descrição", "Preço Min", "Preço"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -75,9 +82,10 @@ public class JHomeFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jTableProducts.setUpdateSelectionOnSort(false);
+        jScrollPane1.setViewportView(jTableProducts);
 
-        jButton3.setText("Sair");
+        jButtonBack.setText("Sair");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,13 +93,13 @@ public class JHomeFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jButton3)
+                .addComponent(jButtonBack)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 373, Short.MAX_VALUE)
                 .addComponent(JAddProductButton)
                 .addGap(19, 19, 19)
-                .addComponent(jButton1)
+                .addComponent(jButtonEdit)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(jButtonDelete)
                 .addGap(35, 35, 35))
             .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
@@ -104,10 +112,10 @@ public class JHomeFrame extends javax.swing.JFrame {
                 .addComponent(JTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JAddProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonBack, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE))
         );
@@ -115,19 +123,37 @@ public class JHomeFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void refreshTableInfo() throws Exception {
+        DefaultTableModel model = (DefaultTableModel) jTableProducts.getModel();
+        model.setRowCount(0);
+        
+        ProductService service = new ProductService();
+        List<ProductModel> list = service.read();
+        
+        for (ProductModel p : list) {
+            model.addRow(new Object[] {
+                p.getProductCode(),
+                p.getProductName(),
+                p.getProductDescription(),
+                p.getProductBasePrice(),
+                p.getProductPrice()
+            });
+        }
+    }
+    
     private void JAddProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JAddProductButtonActionPerformed
         // TODO add your handling code here:
         JAddProductFrame frame = new JAddProductFrame();
         frame.setVisible(true);
     }//GEN-LAST:event_JAddProductButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonEditActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,16 +177,22 @@ public class JHomeFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JHomeFrame().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new JHomeFrame().setVisible(true);
+            } catch (Exception ex) {
+                System.getLogger(JHomeFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JAddProductButton;
     private javax.swing.JLabel JTitleLabel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonBack;
+    private javax.swing.JButton jButtonDelete;
+    private javax.swing.JButton jButtonEdit;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableProducts;
     // End of variables declaration//GEN-END:variables
 }
